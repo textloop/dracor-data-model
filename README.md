@@ -4,9 +4,9 @@ Revision and refinement of existing data model for DraCor
 
 ## Arbeitsplan
 
-- [x] Bestehendes ODD und daraus generierte Doku in Repo einspielen.
-- [ ] Beispieltexte für Basisschema auswählen: z.B. einfach willkürlich aus gerdracor, engdracor, dutchdracor?
-- [ ] Beispieltexte für besondere Bestände auswählen: z.B. einakter?
+- [x] Bestehendes ODD einspielen - Doku https://dracor.org/doc/odd
+- [x] Beispieltexte für Basisschema auswählen und hochladen: z.B. einfach willkürlich aus gerdracor, engdracor
+- [x] Beispieltexte für besondere Bestände auswählen und hochladen.  z.B. Einakter? Der zerbrochene Krug
 
 - [ ] Einarbeiten allgemein in TEI-Kapitel https://www.tei-c.org/release/doc/tei-p5-doc/en/html/DR.html
 - [ ] Abgleich mit Vorgehen in DTA (https://www.deutschestextarchiv.de/doku/basisformat/drama.html?hl=dramen)
