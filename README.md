@@ -11,6 +11,7 @@ Revision and refinement of existing data model for DraCor
 - [ ] Einarbeiten allgemein in TEI-Kapitel https://www.tei-c.org/release/doc/tei-p5-doc/en/html/DR.html
 - [ ] Abgleich mit Vorgehen in DTA (https://www.deutschestextarchiv.de/doku/basisformat/drama.html?hl=dramen)
 - [ ] Abgleich mit weiterem Projekt? Könnt ihr ihr da etwas nennen, das ich noch mit in die Betrachtungen einbeziehen sollte?
+- [ ] Bereits existierende Issues durchgehen vgl. https://github.com/dracor-org/dracor-schema/issues/71
 
 - [ ] IST-Zustand Projekt ODD/Schema mit aktueller TEI Version abgleichen:
 - [ ] Neustart mit Roma für Dramen: ODD erzeugen und abgleichen mit Projekt-ODD
