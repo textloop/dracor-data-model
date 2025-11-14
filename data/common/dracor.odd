@@ -205,6 +205,113 @@
         </div>
         <!-- /file formats -->
 
+        <div xml:id="section-filenames-identifiers">
+          <head>Filenames and identifiers</head>
+          <p>
+            Names and identifiers in the DraCor platform, as in other computer
+            systems, play an important role to navigate to and access individual
+            resources. They are used in URLs and in data structures of API
+            responses. For reasons of consistency, interoperability and ease of
+            use we therefore strongly recommend the following general rules when
+            creating filenames or identifiers such as character IDs:
+          </p>
+          <list>
+            <item>
+              <p>
+                use only digits and letters from the
+                <ref target="https://en.wikipedia.org/wiki/ASCII">ASCII</ref>
+                repertoire
+              </p>
+            </item>
+            <item>
+              <p>use only lowercase letters</p>
+            </item>
+            <item>
+              <p>
+                separate words by dashes ("-"), not underscores ("_") or space
+                characters (" ")
+              </p>
+            </item>
+            <item>
+              <p>
+                don't include any punctuation characters (except for the file
+                extension ".xml")
+              </p>
+            </item>
+            <item>
+              <p>
+                consider that brevity can be an advantage for readability when
+                a name or identifier is used in a URL
+              </p>
+            </item>
+          </list>
+
+          <div xml:id="section-tei-filenames">
+            <head>TEI Filenames</head>
+            <p>
+              For naming TEI files, in addition to the above rules, the
+              following recommendations should be followed:
+            </p>
+            <list>
+              <item>
+                <p>
+                  TEI filenames must use the ".xml" extension.
+                </p>
+              </item>
+              <item>
+                <p>
+                  The filename should start with the surname of the author,
+                  followed by the title of the play (e.g.
+                  "lessing-emilia-galotti.xml").
+                </p>
+              </item>
+              <item>
+                <p>
+                  If there are multiple authors with the same surname within the
+                  same corpus, first name initials can be included after the
+                  surname. <!-- TODO: add example -->
+                </p>
+              </item>
+              <item>
+                <p>In single author corpora the author name can be omitted.</p>
+              </item>
+              <item>
+                <p>
+                  Subtitles should not be included unless necessary for
+                  disambiguation.
+                </p>
+              </item>
+            </list>
+          </div>
+
+          <div xml:id="section-identifiers">
+            <head>Identifiers</head>
+            <p>
+              Identifiers are mostly used in <att>xml:id</att> attributes, for
+              example to uniquely <ref target="#section-character-id">identify
+              the characters</ref> in a play.
+            </p>
+            <p>
+              On a technical level, the values of the
+              <att>xml:id</att> attribute need to be a so-called
+              <soCalled><ref target="https://www.w3.org/TR/xml-id/#processing">NCName</ref></soCalled>
+              which, among other restrictions, cannot start with a digit and
+              must not contain space characters. <note place="bottom">For exact
+              details see
+              <ref>https://www.w3.org/TR/REC-xml-names/#NT-NCName</ref>.</note>
+            </p>
+            <p>
+              Although the XML recommendation allows identifiers to consist of
+              characters beyond the ASCII range, for the DraCor platform the
+              stricter <ref target="#section-filenames-identifiers">general
+              rules above</ref> apply.
+              <note place="bottom">Cf. this
+              <ref target="https://github.com/dracor-org/georgdracor/issues/1">GitHub
+              issue</ref> for a practical reason for these rules.</note>
+            </p>
+          </div>
+        </div>
+
         <div xml:id="section-overview">
           <head>Basic Structure</head>
           <p>
@@ -243,11 +350,34 @@
             EzDrama language</ref>!).
           </p>
           <p rend="hint">
-            If you’re using Oxygen Editor, you can download and try the
-            experimental <ref target="https://github.com/dracor-org/dracor-oxygen-framework">DraCor
+            If you’re using the Oxygen editor, you can install the
+            <ref target="https://github.com/dracor-org/dracor-oxygen-framework?tab=readme-ov-file#usage">DraCor
             Oxygen Framework</ref>. It will help you by checking many kinds of
             inconsistencies in the markup and validating your file against the
             DraCor schema.
+          </p>
+          <p>
+            We recommend to explicitly reference the DraCor schema in an
+            <code>xml-model</code> processing instruction like this:
+            <!-- escaping the processing instruction in the example to avoid
+                 messing up vscode's validation and loosing it in the HTML
+                 rendering -->
+            <egXML xmlns="http://www.tei-c.org/ns/Examples">&lt;?xml-model href="https://dracor.org/schema.rng" schematypens="http://relaxng.org/ns/structure/1.0" type="application/xml" ?&gt;
+              <TEI>
+                <!-- ... -->
+              </TEI>
+            </egXML>
+          </p>
+          <p>
+            If for some reason you prefer not to use a processing instruction a
+            <att>type</att> attribute with the value <val>dracor</val> can be
+            used to associate the document with the DraCor schema in Oxygen
+            (with the DraCor framework installed):
+            <egXML xmlns="http://www.tei-c.org/ns/Examples">
+              <TEI type="dracor">
+                <!-- ... -->
+              </TEI>
+            </egXML>
           </p>
         </div>
         <!-- /overview -->
@@ -319,12 +449,31 @@
               <head>Title</head>
               <p>
                 The title is encoded using the element <gi>title</gi> in
-                <gi>titleStmt</gi>. It can be further classified using the
-                attribute <att>type</att> as main and subtitle:
+                <gi>titleStmt</gi>. Multiple <gi>title</gi> elements can be used
+                to distinguish main and subtitle. The subtitle should be marked
+                with a <att>type</att> <val>sub</val>:
                 <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                  <title type="main">Des Meeres und der Liebe Wellen</title>
+                  <title>Des Meeres und der Liebe Wellen</title>
                   <title type="sub">Trauerspiel in fünf Aufzügen</title>
                 </egXML>
+              </p>
+              <p>
+                For plays written in less commonly known scripts you may want to
+                provide alternative titles in English using the
+                <att>xml:lang</att> attribute:
+                <egXML xmlns="http://www.tei-c.org/ns/Examples">
+                  <title>Ревизор</title>
+                  <title xml:lang="eng">The Government Inspector</title>
+                  <title type="sub">Комедия в пяти действиях</title>
+                  <title type="sub" xml:lang="eng">A Comedy in Five Acts</title>
+                </egXML>
+              </p>
+              <p>
+                If provided, the English titles will be made available by the
+                DraCor API as properties
+                <ref target="#play_title_en">titleEn</ref> and
+                <ref target="#play_subtitle_en">subtitleEn</ref> of a play
+                object.
               </p>
             </div>
             <!-- / title -->
@@ -533,10 +682,7 @@
                     <name>TextGrid Repository</name>
                     <idno type="URL">http://www.textgridrep.org/textgrid:11f78.0</idno>
                     <availability>
-                      <licence>
-                        <ab>CC-BY-3.0</ab>
-                        <ref target="http://creativecommons.org/licenses/by/3.0/de/legalcode">Lizenzvertrag</ref>
-                      </licence>
+                      <licence target="http://creativecommons.org/licenses/by/3.0/de/legalcode">CC-BY-3.0</licence>
                     </availability>
                   </bibl>
                 </egXML>
@@ -683,30 +829,16 @@
                 <head>Character Identifier</head>
                 <p>
                   Each item must have a unique identifier in the attribute
-                  <att>xml:id</att>. As a general rule use letters of the latin
-                  alphabet and numbers for these IDs; don't use any special
-                  characters apart from dash "-" and underscore "_". If your
-                  play is written in a non-latin script use a transliteration of
-                  the character name as the identifier.
-                </p>
-                <p>
-                  On a more technical level: The values of the attribute
-                  <att>xml:id</att> need to be so-called
-                  <soCalled>Nmtokens</soCalled> which cannot contain space
-                  characters among others (see full spec at
-                  <ref target="https://www.w3.org/TR/REC-xml/#NT-Name">https://www.w3.org/TR/REC-xml/#NT-Name</ref>).
-                  Although they can consist of characters from various scripts,
-                  in the case of DraCor we follow the convention to use only
-                  ASCII characters. The reason being that IDs may be used to
-                  construct URLs and anything beyond the ASCII range would have
-                  to be URI encoded which would make the URLs less readable (cf.
-                  <ref target="https://github.com/dracor-org/georgdracor/issues/1">this
-                  GitHub issue</ref>.)
+                  <att>xml:id</att>. They are expected to follow the
+                  <ref target="#section-identifiers">general rules for
+                  identifiers</ref> in DraCor. If your play is written in a
+                  non-latin script use a transliteration of the character name
+                  as the identifier.
                 </p>
                 <p>
                   For characters defined by numerals (“First Soldier, Second
                   Soldier”), please include the values of the attribute
-                  <att>xml:id</att> as follows:<code>xml:id="soldier_1"</code>.
+                  <att>xml:id</att> as follows: <code>xml:id="soldier_1"</code>.
                 </p>
               </div>
               <!-- /character ID -->
@@ -967,9 +1099,7 @@
               editing.
             </p>
           </div>
-          <!-- /section_revisionDesc -->
         </div>
-        <!-- /encoding-header -->
 
         <div xml:id="section-standOff">
           <head>Encoding additional metadata in the <gi>standOff</gi> element</head>
@@ -1022,7 +1152,6 @@
             </p>
           </div>
         </div>
-        <!-- /section_standOff -->
 
         <div xml:id="section-drama-text-proper">
           <head>Encoding the text (<gi>text</gi>)</head>
@@ -1037,62 +1166,62 @@
             <title>The Spanish Wives</title>
             (<ref target="https://dracor.org/id/ep000676">ep000676</ref>).
           </p>
-          <div xml:id="section_paratexts">
+          <div xml:id="section-paratexts">
             <head>Paratexts (<gi>front</gi>)</head>
             <p>
               Paratexts may be encoded with successive layers of complexity.
-              The general rule is to enclose every section in a <gi>div</gi>
-              with an attribute <att>type</att>. Prose text should be enclosed
-              in paragraphs with <gi>p</gi>, lines of verse with <gi>l</gi>.
-              In-text titles of sections may be marked with <gi>head</gi>.
+              Dedicated elements like <gi>titlePage</gi>, <gi>prologue</gi>, or
+              <gi>argument</gi> should be used where appropriate. Only when no
+              suitable element is available <gi>div</gi> elements with an
+              attribute <att>type</att> may be used. Prose text should be
+              enclosed in paragraphs with <gi>p</gi>, lines of verse with
+              <gi>l</gi>. In-text titles of sections may be marked with
+              <gi>head</gi>.
             </p>
             <p>
-              Some examples:
-              <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#ep000676">
+              The list of dramatis personae can be encoded using the element
+              <gi>castList</gi>.
+            </p>
+            <p>
+              For details see the TEI Guidelines sections on
+              <ref target="https://tei-c.org/release/doc/tei-p5-doc/en/html/DR.html#DRFAB">Front
+              and Back Matter</ref> and
+              <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/de/html/DS.html#DSTITL">Title Pages</ref>.
+            </p>
+            <p>
+              Some example from
+              <ref target="https://dracor.org/id/ger000088"><title>Emilia
+              Galotti</title></ref>:
+              <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#ger000088">
                 <front>
-                  <div type="title_page">
-                    <p>
-                      THE Spanish Wives. A FARCE, As it was Acted by His
-                      MAJESTY's Servants, AT THE THEATRE in Dorset-Garden.
-                    </p>
-                    <p>
-                      LONDON: Printed for R. Wellington, at the Sign of the Lute
-                      in St. Paul's Church yard, 1696.
-                    </p>
-                  </div>
-                  <div type="prologue">
-                    <head>PROLOGUE, Spoken by Mr. Penkethman, in a Press-master's Habit.</head>
-                    <l>WHat Chear, my Lads? Igad, I'm come to say,</l>
-                    <l>I'll press to Sea all those who Damn this Play:</l>
-                    [...]
-                  </div>
+                  <titlePage>
+                    <docAuthor>Gotthold Ephraim Lessing</docAuthor>
+                    <docTitle>
+                      <titlePart type="main">Emilia Galotti</titlePart>
+                      <titlePart type="sub">Ein Trauerspiel in fünf Aufzügen</titlePart>
+                    </docTitle>
+                  </titlePage>
+                  <pb n="128"/>
+                  <castList>
+                    <head>Personen.</head>
+                    <castItem>
+                      <role>Emilia Galotti.</role>
+                    </castItem>
+                    <!-- ... -->
+                  </castList>
                 </front>
               </egXML>
-            </p>
-            <p>
-              Dramatis personae can be encoded using the element
-              <gi>castList</gi>.
-              <!--
-                Dramatis personae (the characters’ names, if required with their
-                descriptions) can be rendered as a list with the following
-                syntax (other variants are possible, e.g. substituting <item>
-                with <desc>):
-              -->
-              <!--
-                IB: Won't include this passage from the How-To, don't agree, .
-                use <castList> instead!! -->
+
             </p>
           </div>
-          <!-- /paratexts -->
         </div>
-        <!-- /section_drama_text_proper -->
 
         <div xml:id="section-body-elements">
           <head><gi>text</gi></head>
           <p>
             Mark the main elements in the play’s body <gi>body</gi> as follows:
           </p>
-          <div xml:id="section_segments">
+          <div xml:id="section-segments">
             <head>Segments (acts, scenes, etc.)</head>
             <p>
               Use the element <gi>div</gi> to encode segments of a dramatic
@@ -1109,7 +1238,6 @@
               </egXML>
             </p>
           </div>
-          <!-- /section_segments -->
 
           <div xml:id="section-stage-directions">
             <head>Stage Directions (non-diegetic elements)</head>
@@ -1135,7 +1263,6 @@
               </egXML>
             </p>
           </div>
-          <!-- /section_stage_directions -->
 
           <div xml:id="section-speech-acts">
             <head>Speakers and Speech Acts</head>
@@ -1192,7 +1319,7 @@
                 </sp>
               </egXML>
             </p>
-            <div xml:id="section_special_cases">
+            <div xml:id="section-special-cases">
               <head>Special Cases</head>
               <div>
                 <head>No explicit speaker in text</head>
@@ -1217,9 +1344,7 @@
                 https://github.com/dracor-org/dracor-schema/issues/106
               -->
             </div>
-            <!-- /section_special_cases -->
           </div>
-          <!-- /section_speech_acts -->
         </div>
         <!-- /body elements -->
 
@@ -2709,8 +2834,8 @@
           <moduleRef key="textstructure" except="div1 div2 div3 div4 div5 div6 div7"/>
           <moduleRef key="linking"/>
           <moduleRef key="drama"/>
-          <moduleRef key="namesdates"
-            include="addName event forename genName listEvent listPerson listRelation nameLink person personGrp persName relation surname orgName region"/>
+          <moduleRef key="verse"/>
+          <moduleRef key="namesdates"/>
           <moduleRef key="corpus" include="particDesc"/>
           <moduleRef key="figures" include="figure"/>
           <moduleRef key="analysis"/>
@@ -2775,41 +2900,6 @@
           <!-- ##### -->
 
           <!-- ab  -->
-          <elementSpec ident="ab" module="linking" mode="change">
-            <constraintSpec type="encoding-hint" ident="encoding-hint_ab_used_somewhere_else" scheme="schematron">
-              <desc>
-                In DraCor we discourage the use of the element <gi>ab</gi>
-                anywhere else than to mark the human-readable label of the
-                licence in <gi>availability</gi>.
-              </desc>
-              <!-- This constraint can be tested with the file tst000004 -->
-              <constraint>
-                <sch:rule context="tei:ab" role="warning" see="https://dracor.org/doc/odd#TEI.ab">
-                  <sch:assert test="./parent::tei:licence">
-                    In DraCor the element 'ab' should only be used to mark the
-                    label of the licence in the teiHeader.
-                  </sch:assert>
-                </sch:rule>
-              </constraint>
-            </constraintSpec>
-            <exemplum>
-              <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <availability>
-                  <licence>
-                    <ab>CC0 1.0</ab>
-                    <ref target="https://creativecommons.org/publicdomain/zero/1.0/">Licence</ref>
-                  </licence>
-                </availability>
-              </egXML>
-            </exemplum>
-            <remarks>
-              <p>
-                In DraCor the element <gi>ab</gi> is normally used to encode
-                the name of the licence used.
-              </p>
-            </remarks>
-          </elementSpec>
-
           <!-- abbr -->
           <!-- abstract -->
           <!-- actor -->
@@ -2937,10 +3027,7 @@
             <exemplum>
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <availability>
-                  <licence>
-                    <ab>CC-BY-3.0</ab>
-                    <ref target="http://creativecommons.org/licenses/by/3.0/de/legalcode">Lizenzvertrag</ref>
-                  </licence>
+                  <licence target="http://creativecommons.org/licenses/by/3.0/de/legalcode">CC-BY-3.0</licence>
                 </availability>
               </egXML>
             </exemplum>
@@ -3009,10 +3096,7 @@
                   <name>TextGrid Repository</name>
                   <idno type="URL">http://www.textgridrep.org/textgrid:jn65.0</idno>
                   <availability>
-                    <licence>
-                      <ab>CC-BY-3.0</ab>
-                      <ref target="http://creativecommons.org/licenses/by/3.0/de/legalcode">Lizenzvertrag</ref>
-                    </licence>
+                    <licence target="http://creativecommons.org/licenses/by/3.0/de/legalcode">CC-BY-3.0</licence>
                   </availability>
                   <bibl type="originalSource">
                     <title>Ludwig Anzengruber: Der Meineidbauer. Herausgegeben
@@ -4165,7 +4249,7 @@
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <fileDesc>
                   <titleStmt>
-                    <title type="main">Egmont</title>
+                    <title>Egmont</title>
                     <!-- ... -->
                   </titleStmt>
                   <publicationStmt>
@@ -4484,29 +4568,6 @@
 
           <!-- idno -->
           <elementSpec ident="idno" module="header" mode="change">
-            <constraintSpec ident="xml_base_required_on_idno_type_URI_in_corpus_xml"
-              scheme="schematron" mode="add" corresp="#corpus_name">
-              <!--
-                the xml:base attribute is queried in the dutil:get-corpus
-                function of dracor-api
-              -->
-              <desc>
-                In the corpus.xml (root element <gi>teiCorpus</gi>) the
-                identifier <gi>idno</gi> containing the corpus name (see Feature
-                <ref target="#corpus_name">corpus_name</ref>) SHOULD have an
-                <att>xml:base</att> attribute with the value
-                <val>https://dracor.org/</val>.
-              </desc>
-              <constraint>
-                <sch:rule context="tei:idno[@type eq 'URI' and parent::tei:publicationStmt and ancestor::tei:teiCorpus]" role="warning">
-                  <sch:assert test="@xml:base/string() eq 'https://dracor.org/'">
-                    The idno element in publicationStmt in the teiCorpus SHOULD
-                    have an xml:base attribute with the value
-                    'https://dracor.org/'.
-                  </sch:assert>
-                </sch:rule>
-              </constraint>
-            </constraintSpec>
             <attList>
               <attDef ident="xml:base" mode="change" usage="opt">
                 <desc>
@@ -4570,10 +4631,7 @@
                   <publisher xml:id="dracor">DraCor</publisher>
                   <idno type="URL">https://dracor.org</idno>
                   <availability>
-                    <licence>
-                      <ab>CC0 1.0</ab>
-                      <ref target="https://creativecommons.org/publicdomain/zero/1.0/">Licence</ref>
-                    </licence>
+                    <licence target="https://creativecommons.org/publicdomain/zero/1.0">CC0 1.0</licence>
                   </availability>
                 </publicationStmt>
               </egXML>
@@ -4820,17 +4878,27 @@
 
           <!-- licence -->
           <elementSpec ident="licence" module="header" mode="change">
-            <!-- see https://github.com/dracor-org/dracor-schema/issues/103 -->
+            <constraintSpec ident="licence_target_url" scheme="schematron">
+              <desc>
+                Licence information should refer to a licence document with the
+                providing the full licence text.
+              </desc>
+              <constraint>
+                <sch:rule context="tei:licence" role="warning">
+                  <sch:assert test="@target">
+                    Consider providing the URL to the full licence text in a
+                    @target attribute.
+                  </sch:assert>
+                </sch:rule>
+              </constraint>
+            </constraintSpec>
             <exemplum source="https://dracor.org/id/ger000010">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <publicationStmt>
                   <publisher xml:id="dracor">DraCor</publisher>
                   <idno type="URL">https://dracor.org</idno>
                   <availability>
-                    <licence>
-                      <ab>CC0 1.0</ab>
-                      <ref target="https://creativecommons.org/publicdomain/zero/1.0/">Licence</ref>
-                    </licence>
+                    <licence target="https://creativecommons.org/publicdomain/zero/1.0">CC0 1.0</licence>
                   </availability>
                 </publicationStmt>
                 <!-- ... -->
@@ -4839,10 +4907,7 @@
                     <name>TextGrid Repository</name>
                     <idno type="URL">http://www.textgridrep.org/textgrid:npsg.0</idno>
                     <availability>
-                      <licence>
-                        <ab>CC-BY-3.0</ab>
-                        <ref target="http://creativecommons.org/licenses/by/3.0/de/legalcode">Lizenzvertrag</ref>
-                      </licence>
+                      <licence target="http://creativecommons.org/licenses/by/3.0/de/legalcode">CC-BY-3.0</licence>
                     </availability>
                     <bibl type="originalSource">
                       <title>Franz Grillparzer: Sämtliche Werke. Ausgewählte
@@ -4863,10 +4928,7 @@
             </exemplum>
             <exemplum source="#ger000082">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <licence>
-                  <ab>CC-BY-3.0</ab>
-                  <ref target="http://creativecommons.org/licenses/by/3.0/de/legalcode">Lizenzvertrag</ref>
-                </licence>
+                <licence target="http://creativecommons.org/licenses/by/3.0/de/legalcode">CC-BY-3.0</licence>
               </egXML>
               <ab>
                 The digital source of the play
@@ -4877,10 +4939,7 @@
             </exemplum>
             <exemplum source="https://dracor.org/id/ger000485">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <licence>
-                  <ab>CC BY-NC 3.0</ab>
-                  <ref target="http://creativecommons.org/licenses/by-nc/3.0/de/">Lizenzvertrag</ref>
-                </licence>
+                <licence target="http://creativecommons.org/licenses/by-nc/3.0/de/">CC BY-NC 3.0</licence>
               </egXML>
               <ab>
                 The digital source of the play
@@ -4891,10 +4950,7 @@
             </exemplum>
             <exemplum source="https://dracor.org/id/rus000042">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <licence>
-                  <ab>CC BY-SA 3.0</ab>
-                  <ref target="https://creativecommons.org/licenses/by-sa/3.0/deed.ru">Licence</ref>
-                </licence>
+                <licence target="https://creativecommons.org/licenses/by-sa/3.0/deed.ru">CC BY-SA 3.0</licence>
               </egXML>
               <ab>
                 The digital source of the play
@@ -4986,7 +5042,7 @@
               </ab>
             </exemplum>
             <remarks>
-              <!-- https://github.com/dracor-org/dracor-schema/issues/104 -->
+              <p>See also <ref target="https://github.com/dracor-org/dracor-schema/issues/104">issue 104</ref>.</p>
             </remarks>
           </elementSpec>
 
@@ -5177,6 +5233,17 @@
 
           <!-- particDesc -->
           <elementSpec ident="particDesc" module="corpus" mode="change">
+            <constraintSpec ident="particdesc_person_id" scheme="schematron" mode="add"  type="encoding-hint">
+              <constraint>
+                <sch:rule context="tei:particDesc/tei:listPerson/tei:*[@xml:id]" role="warning" see="https://dracor.org/doc/odd#section-identifiers">
+                  <sch:assert test="matches(@xml:id, '^[a-z]([-a-z0-9]*[a-z0-9])?$')">
+                    The @xml:id in &lt;particDesc&gt; should follow
+                    the DraCor rules for identifiers. See section
+                    "Identifiers" of the guidelines.
+                  </sch:assert>
+                </sch:rule>
+              </constraint>
+            </constraintSpec>
             <exemplum>
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <profileDesc>
@@ -5227,6 +5294,14 @@
 
           <!-- pb -->
           <elementSpec ident="pb" module="core" mode="change">
+            <attList>
+              <attDef ident="facs" usage="opt">
+                <desc>Links this page break to a facsimile image.</desc>
+                <datatype>
+                  <dataRef key="anyURI"/>
+                </datatype>
+              </attDef>
+            </attList>
             <exemplum>
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <sp who="#anton">
@@ -5348,6 +5423,16 @@
 
           <!-- person -->
           <elementSpec ident="person" module="core" mode="change">
+            <constraintSpec ident="person_sex" scheme="schematron" mode="add"  type="encoding-hint">
+              <constraint>
+                <sch:rule context="tei:person[@sex]" role="warning" see="https://dracor.org/doc/odd#section-character-sex-gender">
+                  <sch:assert test="@sex = ('FEMALE', 'MALE', 'UNKNOWN')">
+                    The values for person/@sex supported by the DraCor API are
+                    "FEMALE", "MALE" and "UNKNOWN".
+                  </sch:assert>
+                </sch:rule>
+              </constraint>
+            </constraintSpec>
             <attList>
               <attDef ident="xml:id" mode="change" usage="req"/>
               <!-- need to globally define -->
@@ -5390,20 +5475,20 @@
                 </person>
               </egXML>
             </exemplum>
-            <constraintSpec ident="person_sex" scheme="schematron" mode="add"  type="encoding-hint">
-              <constraint>
-                <sch:rule context="tei:person[@sex]" role="warning" see="https://dracor.org/doc/odd#section-character-sex-gender">
-                  <sch:assert test="@sex = ('FEMALE', 'MALE', 'UNKNOWN')">
-                    The values for person/@sex supported by the DraCor API are
-                    <val>FEMALE</val>, <val>MALE</val> and <val>UNKNOWN</val>.
-                  </sch:assert>
-                </sch:rule>
-              </constraint>
-            </constraintSpec>
           </elementSpec>
 
           <!-- personGrp -->
           <elementSpec ident="personGrp" module="namesdates" mode="change">
+            <constraintSpec ident="personGrp_sex" scheme="schematron" mode="add"  type="encoding-hint">
+              <constraint>
+                <sch:rule context="tei:personGrp[@sex]" role="warning" see="https://dracor.org/doc/odd#section-character-sex-gender">
+                  <sch:assert test="every $t in tokenize(@sex) satisfies $t = ('FEMALE', 'MALE', 'UNKNOWN')">
+                    The values for personGrp/@sex supported by the DraCor API
+                    are "FEMALE", "MALE" and "UNKNOWN".
+                  </sch:assert>
+                </sch:rule>
+              </constraint>
+            </constraintSpec>
             <attList>
               <attDef ident="xml:id" mode="change">
                 <datatype>
@@ -5434,17 +5519,6 @@
                 </remarks>
               </attDef>
             </attList>
-            <constraintSpec ident="personGrp_sex" scheme="schematron" mode="add"  type="encoding-hint">
-              <constraint>
-                <sch:rule context="tei:personGrp[@sex]" role="warning" see="https://dracor.org/doc/odd#section-character-sex-gender">
-                  <sch:assert test="every $t in tokenize(@sex) satisfies $t = ('FEMALE', 'MALE', 'UNKNOWN')">
-                    The values for personGrp/@sex supported by the DraCor API
-                    are <val>FEMALE</val>, <val>MALE</val> and
-                    <val>UNKNOWN</val>.
-                  </sch:assert>
-                </sch:rule>
-              </constraint>
-            </constraintSpec>
           </elementSpec>
 
           <!-- profileDesc -->
@@ -5467,11 +5541,12 @@
                 <val>URI</val>.
               </desc>
               <constraint>
-                <sch:rule context="tei:publicationStmt[ancestor::tei:teiCorpus]" role="critical">
-                  <sch:assert test="tei:idno[@type eq 'URI']">
-                    The identifier 'corpus name' of the corpus MUST be included
-                    as an element idno with the value 'URI' of the attribute
-                    'type'.
+                <sch:rule context="tei:teiCorpus/tei:teiHeader/tei:fileDesc/tei:publicationStmt" role="critical">
+                  <sch:assert test="tei:idno[@type eq 'URI' and @xml:base='https://dracor.org/']">
+                    The corpus.xml must define the corpus name in an
+                    &lt;idno&gt; element of @type "URI" and
+                    an @xml:base of ""https://dracor.org/"". E.g.
+                    &lt;idno type="URI" xml:base="https://dracor.org/"&gt;ger&lt;/idno&gt;.
                   </sch:assert>
                 </sch:rule>
               </constraint>
@@ -5486,10 +5561,10 @@
                 be able to load and update the corpus data from the repository.
               </desc>
               <constraint>
-                <sch:rule context="tei:publicationStmt[ancestor::tei:teiCorpus]" role="warning">
+                <sch:rule context="tei:teiCorpus/tei:teiHeader/tei:fileDesc/tei:publicationStmt" role="warning">
                   <sch:assert test="tei:idno[@type eq 'repo']">
-                    Consider specifying the GitHub repository of the corpus
-                    using an idno element of the type 'repo'.
+                    The corpus.xml should specify the GitHub repository of the
+                    corpus using an &lt;idno&gt; element of the @type "repo".
                   </sch:assert>
                 </sch:rule>
               </constraint>
@@ -5586,6 +5661,12 @@
           <!-- roleDesc -->
           <!-- role -->
           <elementSpec ident="role" module="drama" mode="change">
+            <exemplum>
+              <egXML xmlns="http://www.tei-c.org/ns/Examples">
+                <role>Marinelli</role>
+                <roleDesc>Kammerherr des Prinzen</roleDesc>
+              </egXML>
+            </exemplum>
             <remarks>
               <p>
                 In DraCor do not link <att>who</att> attributes to <gi>role</gi>
@@ -5594,12 +5675,6 @@
                 <ref target="#section-characters">Characters</ref>.
               </p>
             </remarks>
-            <exemplum>
-              <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <role>Marinelli</role>
-                <roleDesc>Kammerherr des Prinzen</roleDesc>
-              </egXML>
-            </exemplum>
           </elementSpec>
 
           <!-- ##### -->
@@ -5684,7 +5759,7 @@
                   <sch:assert test="every $i in $localIDs satisfies replace($i,'#','') = $allIDs"
                     role="warning">
                     At least one character ID provided as the value of the
-                    attribute who '<xsl:value-of select="@who/string()"/>' has
+                    attribute who '<sch:value-of select="@who/string()"/>' has
                     not been declared. A speech act SHOULD link to a 'person' or
                     'personGrp' element in 'particDesc'.
                   </sch:assert>
@@ -5761,6 +5836,29 @@
                 <elementRef key="text" minOccurs="1" maxOccurs="1"/>
               </sequence>
             </content>
+            <constraintSpec ident="xml_model_or_type_dracor_on_root_tei_element"
+              scheme="schematron" mode="add">
+              <desc>
+                DraCor TEI documents should either reference the DraCor Schema
+                in an <code>&lt;?xml-model ... ?&gt;</code> processing
+                instruction or add a <att>type</att> <val>dracor</val> to their
+                root element.
+              </desc>
+              <constraint>
+                <sch:rule context="/tei:TEI" role="warning">
+                  <sch:assert test="@type = 'dracor' or /processing-instruction('xml-model')">
+                    The root <sch:name/> element should have a @type="dracor"
+                    attribute if the schema is not reference in an xml-model PI.
+                  </sch:assert>
+                  <sch:assert
+                    test="not(/processing-instruction('xml-model')) or (some $pi in /processing-instruction('xml-model')
+                          satisfies matches($pi, 'href\s*=\s*[&quot;'']https://dracor\.org/schema\.rng[&quot;'']'))">
+                    The DraCor schema should be refrerenced as
+                    "https://dracor.org/schema.rng" when using a xml-model PI.
+                  </sch:assert>
+                </sch:rule>
+              </constraint>
+            </constraintSpec>
             <constraintSpec ident="valid_dracor_ids_on_root_tei_element"
               scheme="schematron" mode="add" corresp="#play_id">
               <desc>
@@ -5799,7 +5897,7 @@
             </attList>
             <exemplum source="https://dracor.org/id/ger000171">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <TEI xml:id="ger000171" xml:lang="ger">
+                <TEI type="dracor" xml:id="ger000171" xml:lang="ger">
                   <!-- ... -->
                 </TEI>
               </egXML>
@@ -5860,7 +5958,7 @@
             </attList>
             <exemplum source="https://dracor.org/id/ger000010">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <title type="main">Des Meeres und der Liebe Wellen</title>
+                <title>Des Meeres und der Liebe Wellen</title>
               </egXML>
               <ab>
                 Main title of the play
@@ -5880,8 +5978,8 @@
             </exemplum>
             <exemplum source="https://dracor.org/id/rus000054">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
-                <title type="main">Ревизор</title>
-                <title type="main" xml:lang="eng">The Government Inspector</title>
+                <title>Ревизор</title>
+                <title xml:lang="eng">The Government Inspector</title>
                 <title type="sub">Комедия в пяти действиях</title>
                 <title type="sub" xml:lang="eng">A Comedy in Five Acts</title>
               </egXML>
@@ -5929,20 +6027,18 @@
 
           <!-- titleStmt -->
           <elementSpec ident="titleStmt" module="header" mode="change">
-            <!-- expect a title type=main feature play_title -->
-            <constraintSpec ident="play_main_title" scheme="schematron" corresp="#play_title">
+            <constraintSpec ident="play_sub_title" scheme="schematron" corresp="#play_title">
               <desc>
-                The title of the play (see Feature
+                The main title of the play (see Feature
                 <ref target="#play_title">play_title</ref>) is retrieved from
-                the first element <gi>title</gi> with the value <val>main</val>
-                of the attribute <att>type</att>.
+                the first element <gi>title</gi>. A subtitle should be marked
+                with the <att>type</att> <val>sub</val>
               </desc>
               <constraint>
-                <sch:rule context="tei:titleStmt" role="warning">
-                  <sch:assert test="tei:title[@type eq 'main']">
-                    For the DraCor API to include the title of the play in the
-                    response an element 'title' with the type-attribute value
-                    'main' SHOULD be included.
+                <sch:rule context="tei:titleStmt[count(tei:title[not(@xml:lang)]) > 1]" role="warning">
+                  <sch:assert test="tei:title[not(@xml:lang) and @type = 'sub']">
+                    When using multiple &lt;title&gt; elements consider marking
+                    subtitles with a @type "sub".
                   </sch:assert>
                 </sch:rule>
               </constraint>
@@ -5950,7 +6046,7 @@
             <exemplum source="https://dracor.org/id/ger000010">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <titleStmt>
-                  <title type="main">Des Meeres und der Liebe Wellen</title>
+                  <title>Des Meeres und der Liebe Wellen</title>
                   <title type="sub">Trauerspiel in fünf Aufzügen</title>
                   <author>
                     <persName>
@@ -5976,8 +6072,8 @@
             <exemplum source="https://dracor.org/id/rus000054">
               <egXML xmlns="http://www.tei-c.org/ns/Examples">
                 <titleStmt>
-                  <title type="main">Ревизор</title>
-                  <title type="main" xml:lang="eng">The Government Inspector</title>
+                  <title>Ревизор</title>
+                  <title xml:lang="eng">The Government Inspector</title>
                   <title type="sub">Комедия в пяти действиях</title>
                   <title type="sub" xml:lang="eng">A Comedy in Five Acts</title>
                   <author>
@@ -6298,7 +6394,7 @@
                   The value of the attribute '@active' SHOULD follow the
                   pattern "https://dracor.org/entity/{play_id}.
                   [Expected value:
-                  '<xsl:value-of select="$expected_play_uri"/>']"
+                  '<sch:value-of select="$expected_play_uri"/>']"
                 </sch:assert>
               </sch:rule>
             </constraint>
@@ -6750,7 +6846,6 @@
           </table>
         </div>
       </div>
-      <!-- /section_feature_tables -->
 
       <div xml:id="section-other-encoding-guides">
         <head>Additional Ressources on Encoding of DraCor files</head>
