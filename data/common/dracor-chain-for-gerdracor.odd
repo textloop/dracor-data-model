@@ -1,0 +1,33 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>ODD-Chaining for gerdracor - addition of tables</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>...</publisher>
+			</publicationStmt>
+			<sourceDesc>
+				<p>...</p>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text>
+		<body>
+			<schemaSpec ident="dracor-chain-for-gerdracor" start="TEI" prefix="tei_" targetLang="en"
+				docLang="en" source="file:///F:/textloop/Projekte/2024/Berlin_DraCor/GitHub-Repos/dracor-data-model/data/common/dracor_compiled.xml">
+				<moduleRef key="header"/>
+				<moduleRef key="core"/>
+				<moduleRef key="tei"/>
+				<moduleRef key="textstructure"/>
+				<moduleRef key="linking"/>
+				<moduleRef key="drama"/>
+				<moduleRef key="verse"/>
+				<moduleRef key="namesdates"/>
+				<moduleRef key="corpus"/>
+				<moduleRef key="analysis"/>
+				<moduleRef key="figures" source="https://tei-c.org/release/xml/tei/odd/p5subset.xml" include="figure table row cell"/>
+			</schemaSpec>
+		</body>
+	</text>
+</TEI>
